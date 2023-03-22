@@ -2,8 +2,10 @@
   <div>
     <TodoItem
       v-for="todo in todos"
-      v-bind:key="todo.id"
-      v-bind:todoProps="todo"
+      :key="todo.id"
+      :todoProps="todo"
+      @item-completed="markCompleted"
+      @item-deleted="deleteTodo"
     />
   </div>
 </template>
@@ -32,8 +34,22 @@ export default {
         completed: false,
       },
     ]);
+
+    const markCompleted = (id) => {
+      todos.value = todos.value.map((todo) => {
+        if (todo.id === id) todo.completed = !todo.completed;
+        return todo;
+      });
+    };
+
+    const deleteTodo = (id) => {
+      todos.value = todos.value.filter((todo) => todo.id !== id);
+    };
+
     return {
       todos,
+      markCompleted,
+      deleteTodo,
     };
   },
 };
